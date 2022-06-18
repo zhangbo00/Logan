@@ -15,7 +15,7 @@ import com.meituan.logan.web.service.HandlerDispatcher;
 import com.meituan.logan.web.service.LoganLogDetailService;
 import com.meituan.logan.web.util.FileUtil;
 import com.meituan.logan.web.util.OrderUtil;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -33,9 +33,9 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @since 2019-10-12 17:10
  */
+@Slf4j
 @Service("loganLogDetailService")
 public class LoganLogDetailServiceImpl extends AbstractBatchInsertService<LoganLogDetailDTO> implements LoganLogDetailService {
-    private static final Logger LOGGER = Logger.getLogger(LoganLogDetailServiceImpl.class);
     private static final int SIZE = 20;
     private static final Map<String, Object> keyLocks = new ConcurrentHashMap<>();
 
@@ -62,7 +62,7 @@ public class LoganLogDetailServiceImpl extends AbstractBatchInsertService<LoganL
             Collections.sort(logDetails);
             return Lists.partition(Lists.newArrayList(Lists.transform(logDetails, LoganLogDetailDTO::transformToSimple)), SIZE);
         } catch (Exception e) {
-            LOGGER.error(e);
+            log.error(e.getMessage(), e);
             return Collections.emptyList();
         }
     }
@@ -86,7 +86,7 @@ public class LoganLogDetailServiceImpl extends AbstractBatchInsertService<LoganL
                         task.setStatus(TaskStatusEnum.ANALYZED.getStatus());
                         analyzed(task);
                     } catch (Exception e) {
-                        LOGGER.error(e);
+                        log.error(e.getMessage(), e);
                     } finally {
                         keyLocks.remove(key);
                     }
@@ -118,7 +118,7 @@ public class LoganLogDetailServiceImpl extends AbstractBatchInsertService<LoganL
                 return model;
             }));
         } catch (Exception e) {
-            LOGGER.error(e);
+            log.error(e.getMessage(), e);
             return Collections.emptyList();
         }
     }
@@ -136,7 +136,7 @@ public class LoganLogDetailServiceImpl extends AbstractBatchInsertService<LoganL
                             .getFormatContent(dto.getContent()));
             return model;
         } catch (Exception e) {
-            LOGGER.error(e);
+            log.error(e.getMessage(), e);
         }
         return null;
     }
@@ -146,7 +146,7 @@ public class LoganLogDetailServiceImpl extends AbstractBatchInsertService<LoganL
         try {
             detailMapper.batchInsert(list);
         } catch (Exception e) {
-            LOGGER.error(e);
+            log.error(e.getMessage(), e);
         }
     }
 }

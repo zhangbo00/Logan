@@ -5,8 +5,8 @@ import com.meituan.logan.web.enums.TaskStatusEnum;
 import com.meituan.logan.web.mapper.WebLogTaskMapper;
 import com.meituan.logan.web.model.WebLogTaskModel;
 import com.meituan.logan.web.service.WebTaskService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -19,9 +19,9 @@ import java.util.List;
  * @version 1.0 2019-10-31
  * @since logan-admin-server 1.0
  */
+@Slf4j
 @Service
 public class WebTaskServiceImpl implements WebTaskService {
-    private static final Logger LOGGER = Logger.getLogger(WebTaskServiceImpl.class);
     @Resource
     private WebLogTaskMapper webLogTaskMapper;
 
@@ -38,7 +38,7 @@ public class WebTaskServiceImpl implements WebTaskService {
             }
             return true;
         } catch (Exception e) {
-            LOGGER.error(e);
+            log.error(e.getMessage(), e);
         }
         return false;
     }
@@ -48,7 +48,7 @@ public class WebTaskServiceImpl implements WebTaskService {
         try {
             webLogTaskMapper.deleteByAddTime(addTime);
         } catch (Exception e) {
-            LOGGER.error(e);
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -57,7 +57,7 @@ public class WebTaskServiceImpl implements WebTaskService {
         try {
             return webLogTaskMapper.query(beginTime, endTime, deviceId);
         } catch (Exception e) {
-            LOGGER.error(e);
+            log.error(e.getMessage(), e);
         }
         return Collections.emptyList();
     }
@@ -70,7 +70,7 @@ public class WebTaskServiceImpl implements WebTaskService {
             }
             return webLogTaskMapper.queryByIds(taskIds);
         } catch (Exception e) {
-            LOGGER.error(e);
+            log.error(e.getMessage(), e);
         }
         return Collections.emptyList();
     }
@@ -80,7 +80,7 @@ public class WebTaskServiceImpl implements WebTaskService {
         try {
             webLogTaskMapper.updateStatus(taskId, status.getStatus());
         } catch (Exception e) {
-            LOGGER.error(e);
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -91,7 +91,7 @@ public class WebTaskServiceImpl implements WebTaskService {
             long minId = Math.max(0, maxId - count);
             return webLogTaskMapper.queryByRange(minId, maxId);
         } catch (Exception e) {
-            LOGGER.error(e);
+            log.error(e.getMessage(), e);
             return Collections.emptyList();
         }
     }

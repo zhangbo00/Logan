@@ -4,16 +4,16 @@ import com.meituan.logan.web.service.BatchInsertService;
 import com.meituan.logan.web.task.DelaySupplier;
 import com.meituan.logan.web.task.SingleThreadTaskLoop;
 import com.meituan.logan.web.task.TaskLoop;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.log4j.Logger;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 public abstract class AbstractBatchInsertService<T> implements BatchInsertService<T> {
-    private static final Logger LOGGER = Logger.getLogger(AbstractBatchInsertService.class);
 
     private static final int CACHED_SIZE = 200;
     private List<T> cachedLogDetails = new ArrayList<>(CACHED_SIZE);
@@ -65,7 +65,7 @@ public abstract class AbstractBatchInsertService<T> implements BatchInsertServic
                 execute(cachedLogDetails);
             }
         } catch (Exception e) {
-            LOGGER.error(e);
+            log.error(e.getMessage(), e);
         } finally {
             cachedLogDetails.clear();
         }

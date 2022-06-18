@@ -13,10 +13,10 @@ import com.meituan.logan.web.service.WebTaskService;
 import com.meituan.logan.web.util.DateTimeUtil;
 import com.meituan.logan.web.util.Threads;
 import com.meituan.logan.web.util.TypeSafeUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.log4j.Logger;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -40,11 +40,11 @@ import java.util.concurrent.TimeUnit;
  * @version 1.0 2019-11-01
  * @since logan-web 1.0
  */
+@Slf4j
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Controller
 @RequestMapping("/logan/web")
 public class WebLogController {
-    private static final Logger LOGGER = Logger.getLogger(WebLogController.class);
 
     private static final String REGEX = ",";
 
@@ -209,7 +209,7 @@ public class WebLogController {
     @GetMapping("/exception.json")
     @ResponseBody
     public LoganResponse<String> exception() {
-        LOGGER.error(new Exception("exception"));
+        log.error("", new Exception("exception"));
         return LoganResponse.success("exception");
     }
 
@@ -330,7 +330,7 @@ public class WebLogController {
                 cachedList.addAll(list);
             }
         } catch (Exception e) {
-            LOGGER.error(e);
+            log.error(e.getMessage(), e);
         } finally {
             countDownLatch.countDown();
         }
@@ -340,7 +340,7 @@ public class WebLogController {
         try {
             countDownLatch.await(seconds, TimeUnit.SECONDS);
         } catch (Exception e) {
-            LOGGER.error(e);
+            log.error(e.getMessage(), e);
         }
     }
 

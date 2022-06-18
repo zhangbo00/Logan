@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: logan-web
+  #环境
+  profiles:
+    active: dev
+  message:
+    encoding: UTF-8
+  jackson:
+    time-zone: GMT+8
+  servlet:
+    multipart:
+      max-file-size: 10MB
+
+server:
+  port: 8080
+  servlet:
+    context-path: /logan-web
+    encoding:
+      force: true
+      charset: UTF-8
+      enabled: true
+
+mybatis:
+  mapper-locations: classpath*:sqlmap/*.xml
+
+#日志配置
+logging:
+  config: classpath:logback-spring.xml

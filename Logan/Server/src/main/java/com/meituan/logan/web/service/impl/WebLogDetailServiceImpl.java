@@ -4,9 +4,9 @@ import com.meituan.logan.web.dto.WebLogDetailDTO;
 import com.meituan.logan.web.mapper.WebLogDetailMapper;
 import com.meituan.logan.web.service.WebLogDetailService;
 import com.meituan.logan.web.util.OrderUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -21,9 +21,9 @@ import java.util.stream.Collectors;
  * @version 1.0 2019-10-31
  * @since logan-admin-server 1.0
  */
+@Slf4j
 @Service
 public class WebLogDetailServiceImpl extends AbstractBatchInsertService<WebLogDetailDTO> implements WebLogDetailService {
-    private static final Logger LOGGER = Logger.getLogger(WebLogDetailServiceImpl.class);
 
     @Resource
     private WebLogDetailMapper detailMapper;
@@ -33,7 +33,7 @@ public class WebLogDetailServiceImpl extends AbstractBatchInsertService<WebLogDe
         try {
             return detailMapper.queryById(detailId);
         } catch (Exception e) {
-            LOGGER.error(e);
+            log.error(e.getMessage(), e);
         }
         return null;
     }
@@ -43,7 +43,7 @@ public class WebLogDetailServiceImpl extends AbstractBatchInsertService<WebLogDe
         try {
             detailMapper.deleteByRange(lowerBound, upperBound);
         } catch (Exception e) {
-            LOGGER.error(e);
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -55,7 +55,7 @@ public class WebLogDetailServiceImpl extends AbstractBatchInsertService<WebLogDe
                 return OrderUtil.order(list, detailIds, WebLogDetailDTO::getId);
             }
         } catch (Exception e) {
-            LOGGER.error(e);
+            log.error(e.getMessage(), e);
         }
         return Collections.emptyList();
     }
@@ -73,7 +73,7 @@ public class WebLogDetailServiceImpl extends AbstractBatchInsertService<WebLogDe
             }
             return list;
         } catch (Exception e) {
-            LOGGER.error(e);
+            log.error(e.getMessage(), e);
         }
         return Collections.emptyList();
     }
@@ -83,7 +83,7 @@ public class WebLogDetailServiceImpl extends AbstractBatchInsertService<WebLogDe
         try {
             detailMapper.batchInsert(cachedLogDetails);
         } catch (Exception e) {
-            LOGGER.error(e);
+            log.error(e.getMessage(), e);
         }
     }
 }

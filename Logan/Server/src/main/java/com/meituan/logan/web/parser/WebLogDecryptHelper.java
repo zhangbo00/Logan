@@ -1,7 +1,7 @@
 package com.meituan.logan.web.parser;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.log4j.Logger;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
@@ -18,8 +18,8 @@ import java.security.spec.PKCS8EncodedKeySpec;
  * @version 1.0 2019-11-01
  * @since logan-web 1.0
  */
+@Slf4j
 public class WebLogDecryptHelper {
-    private static final Logger LOGGER = Logger.getLogger(WebLogDecryptHelper.class);
 
     private static final String ALGORITHM = "AES";
     private static final String ALGORITHM_TYPE_H5 = "AES/CTR/NoPadding";
@@ -50,7 +50,7 @@ public class WebLogDecryptHelper {
             cipher.init(Cipher.DECRYPT_MODE, privateKey);
             back = cipher.doFinal(Base64.decodeBase64(uploadKey));
         } catch (Exception e) {
-            LOGGER.error(e);
+            log.error(e.getMessage(), e);
         }
         return back;
     }
@@ -61,7 +61,7 @@ public class WebLogDecryptHelper {
             cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, new IvParameterSpec(iv.getBytes()));
             return new String(cipher.doFinal(content));
         } catch (Exception e) {
-            LOGGER.error(e);
+            log.error(e.getMessage(), e);
         }
         return null;
     }

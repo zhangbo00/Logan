@@ -1,7 +1,7 @@
 package com.meituan.logan.web.task;
 
 import com.meituan.logan.web.util.Threads;
-import org.apache.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Queue;
 import java.util.concurrent.*;
@@ -10,8 +10,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * 自旋式执行任务，然后定时收尾
  */
+@Slf4j
 public class SingleThreadTaskLoop implements TaskLoop {
-    private static final Logger LOGGER = Logger.getLogger(TaskLoop.class);
 
     private Executor executor;
     private ScheduledExecutorService scheduledExecutor;
@@ -79,7 +79,7 @@ public class SingleThreadTaskLoop implements TaskLoop {
         try {
             semaphore.tryAcquire(1, TimeUnit.MILLISECONDS);
         } catch (Exception ignored) {
-            LOGGER.error(ignored);
+            log.error("", ignored);
         }
     }
 
@@ -92,7 +92,7 @@ public class SingleThreadTaskLoop implements TaskLoop {
         try {
             task.exec();
         } catch (Exception e) {
-            LOGGER.error(e);
+            log.error(e.getMessage(), e);
         }
     }
 

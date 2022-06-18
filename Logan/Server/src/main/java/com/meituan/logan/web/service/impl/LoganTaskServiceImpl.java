@@ -6,18 +6,18 @@ import com.meituan.logan.web.mapper.LoganTaskMapper;
 import com.meituan.logan.web.model.LoganTaskModel;
 import com.meituan.logan.web.model.request.LoganTaskRequest;
 import com.meituan.logan.web.service.LoganTaskService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.List;
 
+@Slf4j
 @Service("loganTaskService")
 public class LoganTaskServiceImpl implements LoganTaskService {
 
-    private static final Logger LOGGER = Logger.getLogger(LoganTaskServiceImpl.class);
 
     @Resource
     private LoganTaskMapper taskMapper;
@@ -31,7 +31,7 @@ public class LoganTaskServiceImpl implements LoganTaskService {
                 return Lists.newArrayList(Lists.transform(list, LoganTaskDTO::transformToModel));
             }
         } catch (Exception e) {
-            LOGGER.error(e);
+            log.error(e.getMessage(), e);
         }
         return Collections.emptyList();
     }
@@ -44,7 +44,7 @@ public class LoganTaskServiceImpl implements LoganTaskService {
                 return taskDTO.transformToModel();
             }
         } catch (Exception e) {
-            LOGGER.error(e);
+            log.error(e.getMessage(), e);
         }
         return null;
     }
@@ -56,7 +56,7 @@ public class LoganTaskServiceImpl implements LoganTaskService {
             taskMapper.insert(dto);
             return dto.getId();
         } catch (Exception e) {
-            LOGGER.error(e);
+            log.error(e.getMessage(), e);
         }
         return 0L;
     }
@@ -70,7 +70,7 @@ public class LoganTaskServiceImpl implements LoganTaskService {
                 return Lists.newArrayList(Lists.transform(list, LoganTaskDTO::transformToModel));
             }
         } catch (Exception e) {
-            LOGGER.error(e);
+            log.error(e.getMessage(), e);
         }
         return Collections.emptyList();
     }

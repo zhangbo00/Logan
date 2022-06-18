@@ -2,8 +2,8 @@ package com.meituan.logan.web.parser;
 
 import com.meituan.logan.web.enums.ResultEnum;
 import com.meituan.logan.web.model.Tuple;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 
@@ -21,9 +21,9 @@ import java.util.zip.GZIPInputStream;
 /**
  * @since logan-web 1.0
  */
+@Slf4j
 public class LoganProtocol {
 
-    private static final Logger LOGGER = Logger.getLogger(LoganProtocol.class);
 
     private static final char ENCRYPT_CONTENT_START = '\1';
 
@@ -43,7 +43,7 @@ public class LoganProtocol {
             wrap = ByteBuffer.wrap(IOUtils.toByteArray(stream));
             fileOutputStream = new FileOutputStream(file);
         } catch (IOException e) {
-            LOGGER.error(e);
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -63,7 +63,7 @@ public class LoganProtocol {
         try {
             wrap.get(encrypt);
         } catch (java.nio.BufferUnderflowException e) {
-            LOGGER.error(e);
+            log.error(e.getMessage(), e);
             return false;
         }
         return true;
@@ -85,7 +85,7 @@ public class LoganProtocol {
             fileOutputStream.write(plainText);
             fileOutputStream.flush();
         } catch (Exception e) {
-            LOGGER.error(e);
+            log.error(e.getMessage(), e);
         }
         return result;
     }
@@ -95,7 +95,7 @@ public class LoganProtocol {
             IOUtils.copy(new GZIPInputStream(new ByteArrayInputStream(contentBytes)), out);
             return out.toByteArray();
         } catch (IOException e) {
-            LOGGER.error(e);
+            log.error(e.getMessage(), e);
         }
         return new byte[0];
     }
@@ -105,7 +105,7 @@ public class LoganProtocol {
         try {
             fileOutputStream.close();
         } catch (IOException e) {
-            LOGGER.error(e);
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -129,7 +129,7 @@ public class LoganProtocol {
             tuple.setSecond(properties.getProperty("IV"));
             return tuple;
         } catch (IOException e) {
-            LOGGER.error(e);
+            log.error(e.getMessage(), e);
         }
         return null;
     }
